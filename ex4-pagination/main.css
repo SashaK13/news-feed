@@ -1,1 +1,13 @@
+article {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 14px 16px;
+  max-width: 50%;
+  text-align: left;
+  margin: auto;
+  margin-bottom: 20px;
+}
 
+article:hover{
+    background-color: #EFEFFF;
+}

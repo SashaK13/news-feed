@@ -1,11 +1,14 @@
 
-window.onload = resize;
+window.onload = onWindowLoad;
 window.onresize = resize;
 
 function resize(evt) {
   console.log(resize);
 };
 
+function onWindowLoad() {
+  resize();
+};
 /*
 window.addEventListener('keydown', function(event) {
    if (event.keyCode === 40) {
@@ -59,6 +62,8 @@ function showNext10Articles(start, end) {
   }
 };
 
+
+/*----------------------IGNORE THIS SECTION-----------------------------------*/
 /*
 * This MOCKUP function returns a list of articles,
 * as if they were coming from a remote database in the server.
