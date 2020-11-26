@@ -9,5 +9,5 @@ Uses the \<template\> element, which is cloned for each new article pushed into 
 ## Example 3: feed with mockup DB
 Uses a mockup function that pretends to provide data from the server, giving a list of articles to push into the HTML.
 
-# Example 4: pagination
+## Example 4: pagination
 Uses a simple pagination method, to reduce the articles list length.
