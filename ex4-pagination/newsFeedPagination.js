@@ -1,32 +1,34 @@
 
 window.onload = onWindowLoad;
-window.onresize = resize;
-
-function resize(evt) {
-  console.log(resize);
-};
 
 function onWindowLoad() {
-  resize();
-};
-/*
-window.addEventListener('keydown', function(event) {
-   if (event.keyCode === 40) {
-     //left arrow was pressed
-   }
-   console.log('key' + event.keyCode);
-});*/
-window.addEventListener('keydown', function(evt){
-  console.log(event.code);
-});
-
-/*
-*
-*/
-function append100Articles() {
   var articles = getArticlesFromServerDatabaseMOCKUP();
+  appendPaginationTable(articles.length);
+  appendArticles(articles, 10);
+};
 
-    for (var i = 0; i < 10; i++) {
+function appendPaginationTable(articlesLength) {
+  var maxColumns = 0;
+
+  if (articlesLength < 101) {
+    maxColumns =  Math.floor(articlesLength / 10);
+  } else {
+    maxColumns = 10;
+  }
+
+  var paginationTable = document.getElementById('paginationTable');
+  var paginationRow = paginationTable.insertRow(0);
+
+  for (var i = 0; i < maxColumns; i++) {
+    var paginationCell = paginationRow.insertCell(i);
+    paginationCell.innerText = i + 1;
+    paginationCell.addEventListener('click', eventShowNext10Articles);
+  }
+};
+
+function appendArticles(articles, articlesPerPage) {
+
+    for (var i = 0; i < articlesPerPage; i++) {
       var temp = document.getElementsByTagName("template")[0];
       // create a clone and edit it
       var clon = temp.content.cloneNode(true);
@@ -37,11 +39,13 @@ function append100Articles() {
     }
 };
 
-/*
-* This function receives the start and end values for the pagination,
-* as input parameters.
-* Then those start and end values are used to select the articles to be shown.
-*/
+function eventShowNext10Articles(event) {
+  var index = event.path[0].childNodes[0].data;
+  console.log(index);
+
+  showNext10Articles(index*10-10, index*10);
+};
+
 function showNext10Articles(start, end) {
   console.log(start, end);
   // remove the content of the div 'myArticles'
@@ -51,10 +55,10 @@ function showNext10Articles(start, end) {
   var articles = getArticlesFromServerDatabaseMOCKUP();
 
   // add new content to the div 'myArticles'
+  var template = document.getElementsByTagName("template")[0];
   for (var i = start; i < end; i++) {
-    var temp = document.getElementsByTagName("template")[0];
     // create a clone and edit it
-    var clon = temp.content.cloneNode(true);
+    var clon = template.content.cloneNode(true);
     clon.querySelector('h2').textContent = articles[i].title;
     clon.querySelector('p').textContent = articles[i].description;
     // append the clone to the HTML document body

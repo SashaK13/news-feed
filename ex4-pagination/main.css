@@ -1,5 +1,5 @@
 article {
-  border: 1px solid black;
+  border: 1px solid lightgrey;
   border-radius: 10px;
   padding: 14px 16px;
   max-width: 50%;
@@ -9,5 +9,27 @@ article {
 }
 
 article:hover{
-    background-color: #EFEFFF;
+    background-color: #F3F3FF;
+    border: 2px solid #9999FF;
+    color: #9999FF;
+}
+table {
+  margin: auto;
+}
+
+td {
+  padding-left: 10px;
+  padding-right: 10px;
+  color: blue;
+}
+
+td:hover {
+  text-decoration: underline;
+  text-decoration-style: solid 10px;
+  font-size: 20px;
+}
+
+#next {
+  padding-left: 70px;
+  padding-right: 70px;
 }

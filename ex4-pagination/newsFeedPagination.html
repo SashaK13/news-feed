@@ -6,7 +6,7 @@
     <script type="text/javascript" src="newsFeedPagination.js"></script>
     <title></title>
   </head>
-  <body onload="append100Articles()">
+  <body>
 
     <template>
       <article class="">
@@ -18,7 +18,7 @@
     <div class="" id="myArticles"></div>
     <!-- must append here, before the table -->
 
-    <table>
+    <!-- <table>
       <tr>
         <td onclick="showNext10Articles(0, 9)">1</td>
         <td onclick="showNext10Articles(10, 19)">2</td>
@@ -30,7 +30,10 @@
         <td onclick="showNext10Articles(70, 79)">8</td>
         <td onclick="showNext10Articles(80, 89)">9</td>
         <td onclick="showNext10Articles(90, 99)">10</td>
+        <td id="next" onclick="">Next</td>
       </tr>
+    </table> -->
+    <table id="paginationTable">
     </table>
 
   </body>
