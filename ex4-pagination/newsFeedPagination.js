@@ -1,17 +1,28 @@
+/*
+* On the window event 'onload' the function preparePage is called.
+*/
+window.onload = preparePage;
 
-window.onload = onWindowLoad;
-
-function onWindowLoad() {
+/*
+* This function loads the list of articles,
+* appends the pagination table and the list of articles.
+*/
+function preparePage() {
   var articles = getArticlesFromServerDatabaseMOCKUP();
-  appendPaginationTable(articles.length);
-  appendArticles(articles, 10);
+  var articlesPerPage = 10;
+  appendPaginationTable(articles.length, articlesPerPage);
+  appendArticles(articles, articlesPerPage);
 };
 
-function appendPaginationTable(articlesLength) {
+/*
+* This function appends a pagination table at the bottom of the page.
+* The number of paginations is propotional to the input parameter articlesLength.
+*/
+function appendPaginationTable(articlesLength, articlesPerPage) {
   var maxColumns = 0;
 
   if (articlesLength < 101) {
-    maxColumns =  Math.floor(articlesLength / 10);
+    maxColumns =  Math.floor(articlesLength / articlesPerPage);
   } else {
     maxColumns = 10;
   }
@@ -26,12 +37,18 @@ function appendPaginationTable(articlesLength) {
   }
 };
 
+/*
+* This function is creating as many articles as indicated in input paramiter articlesPerPage.
+* On every loop iteration creates a clon of the tamplate and
+* updates it with the content from the articles list.
+* Then appends the article to the HTML document.
+*/
 function appendArticles(articles, articlesPerPage) {
 
     for (var i = 0; i < articlesPerPage; i++) {
-      var temp = document.getElementsByTagName("template")[0];
+      var template = document.getElementsByTagName("template")[0];
       // create a clone and edit it
-      var clon = temp.content.cloneNode(true);
+      var clon = template.content.cloneNode(true);
       clon.querySelector('h2').textContent = articles[i].title;
       clon.querySelector('p').textContent = articles[i].description;
       // append the clone to the HTML document body
@@ -39,13 +56,22 @@ function appendArticles(articles, articlesPerPage) {
     }
 };
 
+/*
+* This function catches every user click event on the pagination table,
+* Then it calls the function 'showNext10Articles',
+* passing it two values as parameters, proportional to the 'paginationIndex'.
+*/
 function eventShowNext10Articles(event) {
-  var index = event.path[0].childNodes[0].data;
-  console.log(index);
+  var paginationIndex = event.path[0].childNodes[0].data;
+  console.log(paginationIndex);
 
-  showNext10Articles(index*10-10, index*10);
+  showNext10Articles(paginationIndex*10-10, paginationIndex*10);
 };
 
+/*
+* This function takes two input parameters to show a subset of articles.
+* This function is called whenever the user clicks on the pagination index at the bottom.
+*/
 function showNext10Articles(start, end) {
   console.log(start, end);
   // remove the content of the div 'myArticles'
