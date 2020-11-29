@@ -13,4 +13,4 @@ Uses a mockup function that pretends to provide data from the server, giving a l
 Uses a simple pagination method, to reduce the articles list length.
 
 ## Example 5: recycling list of containers
-Detect the user scroll down and scroll up events (mouse and touch gesture) to update the list of articles. There will be only four articles at a time, and the article HTML containers will be recycled, updating the content of each one of the articles with the next/previous (down/up) article in the list.
+Detect the user scroll down events to update the list of articles. The list of articles will be increased by eight every time that the user reaches the bottom of the page, until the full list is appended.
