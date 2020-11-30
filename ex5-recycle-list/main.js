@@ -11,14 +11,13 @@
 var start = 0;
 var end = 8;
 var maxArticlesCount = 100;
-var pixelHeightThreshold = window.innerHeight*20;
 
 /*
 * Those two lines of code are two event listeners onload and onscroll added to the window,
 * calling the functions on every load of the page and every scroll on the page.
 */
 window.addEventListener('load', createHtmlArticleContainers)
-window.addEventListener("scroll", upateArticlesContent);
+window.addEventListener("scroll", appendArticles, false);
 
 /*
 * This function is triggered when the user scrolls down and is creating the new articles on the page,
@@ -26,10 +25,9 @@ window.addEventListener("scroll", upateArticlesContent);
 * The articles are append 8 at the time when the user reaches the bottom of the page.
 */
 function createHtmlArticleContainers() {
-  console.log('createHtmlArticleContainers()');
   if (end < maxArticlesCount) {
     var newArticles = getArticlesFromServerDatabaseMOCKUP(start, end);
-    console.log('newArticles.length: ' + newArticles.length + ', start ' + start + ', end ' + end);
+    // console.log('newArticles.length: ' + newArticles.length + ', start ' + start + ', end ' + end);
     for (var i = 0; i < 8; i++) {
       var article = document.createElement('article');
       document.body.appendChild(article);
@@ -52,10 +50,8 @@ function createHtmlArticleContainers() {
 * This function detects if the user reached bottom of the page
 * and in such case calls the functions that appends 8 new articles.
 */
-function upateArticlesContent() {
-  console.log('upateArticlesContent()');
+function appendArticles() {
   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-    console.log("bottom of the page reached");
     createHtmlArticleContainers();
   }
 };

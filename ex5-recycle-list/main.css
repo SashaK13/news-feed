@@ -1,0 +1,6 @@
+html {
+  /* adding a bit more height, so there is something to scroll,
+  * and the scroll event is triggered
+  */
+  height: 101%;
+}
