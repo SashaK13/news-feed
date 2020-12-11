@@ -16,7 +16,7 @@ var maxArticlesCount = 100;
 * Those two lines of code are two event listeners onload and onscroll added to the window,
 * calling the functions on every load of the page and every scroll on the page.
 */
-window.addEventListener('load', createHtmlArticleContainers)
+window.addEventListener('load', createHtmlArticleContainers);
 window.addEventListener("scroll", appendArticles, false);
 
 /*
