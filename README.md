@@ -14,3 +14,6 @@ Uses a simple pagination method, to reduce the articles list length.
 
 ## Example 5: recycling list of containers
 Detect the user scroll down events to update the list of articles. The list of articles will be increased by eight every time that the user reaches the bottom of the page, until the full list is appended.
+
+## Example 6: pagination with bootstrap
+Using the bootstrap framework, we updated the look and responsiveness of the articles page.
