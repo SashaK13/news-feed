@@ -1,0 +1,29 @@
+
+table {
+  margin: auto;
+}
+
+td {
+  padding-left: 10px;
+  padding-right: 10px;
+  color: blue;
+}
+
+td:hover {
+  text-decoration: underline;
+  text-decoration-style: solid 10px;
+  font-size: 20px;
+}
+
+.card {
+  width: 18rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+#next {
+  padding-left: 70px;
+  padding-right: 70px;
+}
