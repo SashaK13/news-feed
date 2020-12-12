@@ -53,10 +53,13 @@ function appendArticles(articles, articlesPerPage) {
       // clon.querySelector('').textContent = articles[i].title;
       clon.querySelector('p').textContent = articles[i].description;
       clon.querySelector('a').textContent = "Read more";
+      clon.querySelector('a').setAttribute("id", articles[i].id);
       // append the clone to the HTML document body
+      clon.querySelector('a').addEventListener('click', openArticleView);
+
       document.getElementById('myArticles').appendChild(clon);
     }
-};
+  };
 
 /*
 * This function catches every user click event on the pagination table,
@@ -94,13 +97,22 @@ function showNext10Articles(start, end) {
   }
 };
 
+ function openArticleView(event) {
+   console.log(event.path[0].id);
+
+   var uniqueId = event.path[0].id;
+   var article = getArticlesFromServerDatabaseMOCKUP(uniqueId);
+
+   window.location.replace("../ex7-article-view/article-view.html?article="+ uniqueId);
+ };
+
 
 /*----------------------IGNORE THIS SECTION-----------------------------------*/
 /*
 * This MOCKUP function returns a list of articles,
 * as if they were coming from a remote database in the server.
 */
-function getArticlesFromServerDatabaseMOCKUP() {
+function getArticlesFromServerDatabaseMOCKUP(id) {
   var articles = [
     {
       "id": 0,
@@ -604,5 +616,9 @@ function getArticlesFromServerDatabaseMOCKUP() {
     }
   ];
 
-  return articles;
+  if (id) {
+    return articles[id];
+  } else {
+    return articles;
+  }
 };
