@@ -90,8 +90,11 @@ function showNext10Articles(start, end) {
   for (var i = start; i < end; i++) {
     // create a clone and edit it
     var clon = template.content.cloneNode(true);
-    clon.querySelector('h2').textContent = articles[i].title;
+    clon.querySelector('h5').textContent = articles[i].title;
     clon.querySelector('p').textContent = articles[i].description;
+    clon.querySelector('a').textContent = "Read more";
+    clon.querySelector('a').setAttribute("id", articles[i].id);
+    clon.querySelector('a').addEventListener('click', openArticleView);
     // append the clone to the HTML document body
     document.getElementById('myArticles').appendChild(clon);
   }
