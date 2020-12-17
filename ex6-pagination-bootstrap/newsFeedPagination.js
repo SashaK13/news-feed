@@ -3,6 +3,8 @@
 */
 window.onload = preparePage;
 
+var paginationIndex = 1;
+
 /*
 * This function loads the list of articles,
 * appends the pagination table and the list of articles.
@@ -11,7 +13,30 @@ function preparePage() {
   var articles = getArticlesFromServerDatabaseMOCKUP();
   var articlesPerPage = 10;
   appendPaginationTable(articles.length, articlesPerPage);
-  appendArticles(articles, articlesPerPage);
+  var currentUrl = window.location.href;
+  // let's catch the paginationIndex, extracting a substring from the URL,
+  var paginationIndexStart = currentUrl.indexOf('?paginationIndex=');
+  var paginationIndexEnd = currentUrl.indexOf('&article');
+  console.log('paginationIndexStart: ' + paginationIndexStart);
+  // Notice that the end of the paginationIndex should be the at the start of the articleId parameter
+  // but if the paginationIndexEnd does NOT exist (for whatever the reason), it will be same as the end of the URL
+  if(paginationIndexEnd == -1) {
+      paginationIndexEnd = currentUrl.length;
+  }
+  // if everything was correct until here, and the paginationIndexStart exists,
+  // then we can correctly extract the paginationIndex number from the URL
+  if(paginationIndexStart > -1) {
+      paginationIndex = currentUrl.substring(paginationIndexStart+17, paginationIndexEnd);
+      console.log('paginationIndex: ' + paginationIndex);
+      // calculate the start and end indexes of the articles to be shown.
+      var start = (articlesPerPage*(paginationIndex-1));
+      var end = start + articlesPerPage;
+      showNext10Articles(start, end);
+  } else {
+      // else (the paginationIndex does NOT exist)
+      // we load the articles from the 1st to the Nth (being calculated with the articles per page variable)
+      showNext10Articles(paginationIndex*articlesPerPage-10, paginationIndex*articlesPerPage);
+  }
 };
 
 /*
@@ -38,36 +63,12 @@ function appendPaginationTable(articlesLength, articlesPerPage) {
 };
 
 /*
-* This function is creating as many articles as indicated in input paramiter articlesPerPage.
-* On every loop iteration creates a clon of the tamplate and
-* updates it with the content from the articles list.
-* Then appends the article to the HTML document.
-*/
-function appendArticles(articles, articlesPerPage) {
-
-    for (var i = 0; i < articlesPerPage; i++) {
-      var template = document.getElementsByTagName("template")[0];
-      // create a clone and edit it
-      var clon = template.content.cloneNode(true);
-      clon.querySelector('h5').textContent = articles[i].title;
-      // clon.querySelector('').textContent = articles[i].title;
-      clon.querySelector('p').textContent = articles[i].description;
-      clon.querySelector('a').textContent = "Read more";
-      clon.querySelector('a').setAttribute("id", articles[i].id);
-      // append the clone to the HTML document body
-      clon.querySelector('a').addEventListener('click', openArticleView);
-
-      document.getElementById('myArticles').appendChild(clon);
-    }
-  };
-
-/*
 * This function catches every user click event on the pagination table,
 * Then it calls the function 'showNext10Articles',
 * passing it two values as parameters, proportional to the 'paginationIndex'.
 */
 function eventShowNext10Articles(event) {
-  var paginationIndex = event.path[0].childNodes[0].data;
+  paginationIndex = event.path[0].childNodes[0].data;
   console.log(paginationIndex);
 
   showNext10Articles(paginationIndex*10-10, paginationIndex*10);
@@ -78,7 +79,8 @@ function eventShowNext10Articles(event) {
 * This function is called whenever the user clicks on the pagination index at the bottom.
 */
 function showNext10Articles(start, end) {
-  console.log(start, end);
+  // window.location.href = "../ex6-pagination-bootstrap/newsFeedPagination.html?paginationIndex=" + paginationIndex;
+  console.log('start:' + start + ', end: ' + end);
   // remove the content of the div 'myArticles'
   document.getElementById('myArticles').innerHTML = "";
 
@@ -98,6 +100,9 @@ function showNext10Articles(start, end) {
     // append the clone to the HTML document body
     document.getElementById('myArticles').appendChild(clon);
   }
+
+    // Add a page parameter to the URL so the article-view page can know the pagination to where it should return to.
+    window.history.replaceState(null, null, "?paginationIndex=" + paginationIndex);
 };
 
  function openArticleView(event) {
@@ -106,7 +111,7 @@ function showNext10Articles(start, end) {
    var uniqueId = event.path[0].id;
    var article = getArticlesFromServerDatabaseMOCKUP(uniqueId);
 
-   window.location.replace("../ex7-article-view/article-view.html?article="+ uniqueId);
+   window.location.replace("../ex7-article-view/article-view.html?paginationIndex=" + paginationIndex + "&article="+ uniqueId);
  };
 
 

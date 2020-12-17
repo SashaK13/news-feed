@@ -3,6 +3,8 @@
 */
 window.onload = preparePage;
 
+var paginationIndex = 1;// By default, the backButton will take you back to the pagination index 1
+
 /*
 * This function, adds the event listener to the 'go back' button, to go back to the main list of articles,
 * and it also executes the function to fill the article content
@@ -10,6 +12,7 @@ window.onload = preparePage;
 function preparePage() {
     // add an event listener to the back button, to return to the main list of articles
     document.getElementById('backButton').addEventListener('click', goBackToArticleList);
+    var paginationIndex = getPaginationIndexFromTheUrlParameter();
     // Get the article Id that the user clicked, from the URL of article-view.html
     var articleId = getArticleIdFromTheUrlParameter();
     // RETRIEVE THE ARTICLE FROM THE DATABASE
@@ -18,12 +21,22 @@ function preparePage() {
     updateHtmlContentWithTheRetrievedArticleData(article);
 };
 
+function getPaginationIndexFromTheUrlParameter() {
+    var currentUrl = window.location.href;
+    var paginationIndexStart = currentUrl.indexOf('?paginationIndex=');
+    if(paginationIndexStart > -1) {
+        paginationIndex = currentUrl.substring(paginationIndexStart+17, currentUrl.length);
+    }
+
+    return paginationIndex;
+};
+
 /*
 * This function is tangled to the click event listener in the 'go gack' button, and executed when the user clicks the button,
 * to return back to the main list of articles.
 */
 function goBackToArticleList() {
-    window.location.href="../ex6-pagination-bootstrap/newsFeedPagination.html";
+    window.location.href = "../ex6-pagination-bootstrap/newsFeedPagination.html?paginationIndex=" + paginationIndex;
 };
 
 /*
@@ -36,10 +49,10 @@ function getArticleIdFromTheUrlParameter() {
     // Get the current URL of the 'article-view.html' web page
     var currentUrl = window.location.href; // This browser function returns the current full URL
     // Identify the position in the URL of the article parameter.
-    var startIndexOfArticleId = currentUrl.indexOf('?article=');// indexOf finds the starting index of the queried item in the array/list/string
-    // Extract from the full URL the article parameter value, which is located 9 characters after the beginning of '?article='
+    var startIndexOfArticleId = currentUrl.indexOf('&article=');// indexOf finds the starting index of the queried item in the array/list/string
+    // Extract from the full URL the article parameter value, which is located 9 characters after the beginning of '&article='
     // Note that the article ID number can be 1 or more figures, so we ensure to extract the full number by extracting from the URL,
-    // from the beginning (at ?article= + 9 characters) to the end of the URL string (currentUrl.length)
+    // from the beginning (at &article= + 9 characters) to the end of the URL string (currentUrl.length)
     var articleId = currentUrl.substring(startIndexOfArticleId+9, currentUrl.length);// substring returns everything in between the two given index parameters
     // return the article ID parameter extracted from the URL
     return articleId;
