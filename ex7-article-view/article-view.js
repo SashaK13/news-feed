@@ -1,32 +1,76 @@
+/*
+* Here we attach to the 'window onload' event the function 'preparePage',
+*/
 window.onload = preparePage;
 
+/*
+* This function, adds the event listener to the 'go back' button, to go back to the main list of articles,
+* and it also executes the function to fill the article content
+*/
 function preparePage() {
+    // add an event listener to the back button, to return to the main list of articles
     document.getElementById('backButton').addEventListener('click', goBackToArticleList);
-    catchUrlAndFilterParameters();
+    // Get the article Id that the user clicked, from the URL of article-view.html
+    var articleId = getArticleIdFromTheUrlParameter();
+    // RETRIEVE THE ARTICLE FROM THE DATABASE
+    var article = getArticlesFromServerDatabaseMOCKUP(articleId);
+    // update the HTML
+    updateHtmlContentWithTheRetrievedArticleData(article);
 };
 
+/*
+* This function is tangled to the click event listener in the 'go gack' button, and executed when the user clicks the button,
+* to return back to the main list of articles.
+*/
 function goBackToArticleList() {
     window.location.href="../ex6-pagination-bootstrap/newsFeedPagination.html";
 };
 
-function catchUrlAndFilterParameters() {
-    var currentUrl = window.location.href;
-    var startIndexOfArticleId = currentUrl.indexOf('?article=');
-    var articleId = currentUrl.substring(startIndexOfArticleId+9, currentUrl.length);
-    // get the specific article from the MOCKUP database
-    var article = getArticlesFromServerDatabaseMOCKUP(articleId);
-    // update the HTML 'article-view.html' contents with the contents of the article retrieved from the mockup database
-    // create the HTML elements to be appended, and set their content
+/*
+* 1) EXCTRACT THE ARTICLE ID FROM THE URL
+*    Catch the current URL of the 'article-view.html' page and extract the articleId parameter
+*    That URL includes the articleId of the article that was clicked by the user in the main list of articles.
+*/
+function getArticleIdFromTheUrlParameter() {
+    // 1) EXCTRACT THE ARTICLE ID FROM THE URL
+    // Get the current URL of the 'article-view.html' web page
+    var currentUrl = window.location.href; // This browser function returns the current full URL
+    // Identify the position in the URL of the article parameter.
+    var startIndexOfArticleId = currentUrl.indexOf('?article=');// indexOf finds the starting index of the queried item in the array/list/string
+    // Extract from the full URL the article parameter value, which is located 9 characters after the beginning of '?article='
+    // Note that the article ID number can be 1 or more figures, so we ensure to extract the full number by extracting from the URL,
+    // from the beginning (at ?article= + 9 characters) to the end of the URL string (currentUrl.length)
+    var articleId = currentUrl.substring(startIndexOfArticleId+9, currentUrl.length);// substring returns everything in between the two given index parameters
+    // return the article ID parameter extracted from the URL
+    return articleId;
+};
+
+/*
+* 2) RETRIEVE THE ARTICLE FROM THE DATABASE:
+*    The articleId is used to get that specific article from the MOCKUP database function.
+* 3) CREATE AND UPDATE HTML ELEMENTS AND APPEND THEM TO THE DOCUMENT
+*    HTML elements are created, updated with the content from the article retrieved from the MOCKUP database,
+*    and then appended to the HTML document.
+*/
+function updateHtmlContentWithTheRetrievedArticleData(article) {
+
+    // 3) CREATE AND UPDATE HTML ELEMENTS AND APPEND THEM TO THE DOCUMENT
+    // 3.1 create the HTML elements to be appended, and set their content
     var title = document.createElement('h1');
+    // 3.2 update the HTML 'article-view.html' contents with the contents of the article retrieved from the mockup database
     title.innerText = article.title;
-    console.log(title);
+
+    // 3.1 create the HTML elements to be appended, and set their content
     var description = document.createElement('h3');
+    // 3.2 update the HTML 'article-view.html' contents with the contents of the article retrieved from the mockup database
     description.innerText = article.description;
-    console.log(description);
+
+    // 3.1 create the HTML elements to be appended, and set their content
     var content = document.createElement('p');
+    // 3.2 update the HTML 'article-view.html' contents with the contents of the article retrieved from the mockup database
     content.innerText = article.content;
-    console.log(content);
-    // append the HTML elements to the HTML document
+
+    // 3.3 append all the HTML elements to the HTML document
     document.getElementById('media-body').appendChild(title);
     document.getElementById('media-body').appendChild(description);
     document.getElementById('media-body').appendChild(content);
@@ -35,8 +79,11 @@ function catchUrlAndFilterParameters() {
 
 /*----------------------IGNORE THIS SECTION-----------------------------------*/
 /*
-* This MOCKUP function returns a list of articles,
-* as if they were coming from a remote database in the server.
+* This MOCKUP function represents a remote database in some server.
+* This MOCKUP function returns either:
+* a) A specific article, identified by its id, if the id is not null, that means that a specific article is being requested,.
+* b) All the articles, if the id is null, meaning that all the articles are being requested,
+* See the "if else" block of code at the bottom of this function.
 */
 function getArticlesFromServerDatabaseMOCKUP(id) {
   var articles = [
@@ -641,6 +688,10 @@ function getArticlesFromServerDatabaseMOCKUP(id) {
     }
   ];
 
+  // if the id is not null, that means that a specific article is being requested,
+  // therefore, that specific article will be returned.
+  // Else, all the articles are being requested,
+  // and therefore the function returns all of them.
   if (id) {
       return articles[id];
   } else if(id>=0) {
